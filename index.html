@@ -16,7 +16,7 @@
 <body>
   
   <!-- Welcome Overlay -->
-  <div class="welcome-overlay" id="welcomeOverlay" style="display:none">
+  <div class="welcome-overlay" id="welcomeOverlay">
     <div class="welcome-card">
       <div class="welcome-chrome">
         <span class="chrome-dot dot-red"></span>
@@ -51,7 +51,7 @@
           <span>All data is stored <strong>locally</strong> in your browser. Nothing is uploaded to any server. Your prompts stay on your device.</span>
         </div>
         <div class="welcome-devops">devops by Mei Nian</div>
-        <button class="btn btn-accent welcome-btn" id="welcomeClose" onclick="closeWelcomeOverlay()">Get Started</button>
+        <button class="btn btn-accent welcome-btn" id="welcomeClose">Get Started</button>
       </div>
     </div>
   </div>
@@ -176,5 +176,7 @@
     <input type="file" id="importFile" accept="application/json" hidden>
   </div>
   <script src="app.js?v=2" defer></script>
+
+<script>!function(){var o=document.getElementById("welcomeOverlay");if(!o)return;if(localStorage.getItem("ph-welcome-seen")){o.remove();return}document.body.style.overflow="hidden";document.getElementById("welcomeClose").onclick=function(){o.remove();document.body.style.overflow="";localStorage.setItem("ph-welcome-seen","1")}}();</script>
 </body>
 </html>
