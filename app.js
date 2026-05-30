@@ -75,6 +75,10 @@ function renderTagFilters() {
     btn.addEventListener("click", function() {
       activeTagFilter = activeTagFilter === btn.dataset.tag ? null : btn.dataset.tag;
       renderAll();
+    });
+  });
+}
+
 function getFilteredPrompts() {
   var q = searchInput.value.toLowerCase().trim();
   return prompts.filter(function(p) {
