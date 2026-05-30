@@ -76,16 +76,23 @@ function renderTagFilters() {
       activeTagFilter = activeTagFilter === btn.dataset.tag ? null : btn.dataset.tag;
       renderAll();
 // ===== Welcome Overlay =====
-var welcomeOverlay = document.getElementById("welcomeOverlay");
-if (welcomeOverlay && !localStorage.getItem("ph-welcome-seen")) {
-  welcomeOverlay.classList.remove("hidden");
-  document.getElementById("welcomeClose").addEventListener("click", function() {
-    welcomeOverlay.classList.add("hidden");
+(function() {
+  var overlay = document.getElementById("welcomeOverlay");
+  if (!overlay) return;
+  if (localStorage.getItem("ph-welcome-seen")) {
+    overlay.style.display = "none";
+    return;
+  }
+  function closeWelcome() {
+    overlay.style.display = "none";
     localStorage.setItem("ph-welcome-seen", "1");
-  });
-} else if (welcomeOverlay) {
-  welcomeOverlay.classList.add("hidden");
-}
+  }
+  var btn = document.getElementById("welcomeClose");
+  if (btn) btn.onclick = closeWelcome;
+  overlay.onclick = function(e) {
+    if (e.target === overlay) closeWelcome();
+  };
+})();
 
     });
   });
