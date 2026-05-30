@@ -481,26 +481,7 @@ importFile.addEventListener("change", function() {
   importFile.value = "";
 });
 
-// ===== Welcome Overlay =====
-(function() {
-  var overlay = document.getElementById("welcomeOverlay");
-  if (!overlay) return;
-  if (localStorage.getItem("ph-welcome-seen")) {
-    overlay.style.display = "none";
-    return;
-  }
-  document.body.style.overflow = "hidden";
-  function closeWelcome() {
-    overlay.style.display = "none";
-    document.body.style.overflow = "";
-    localStorage.setItem("ph-welcome-seen", "1");
-  }
-  var btn = document.getElementById("welcomeClose");
-  if (btn) btn.onclick = closeWelcome;
-  overlay.onclick = function(e) {
-    if (e.target === overlay) closeWelcome();
-  };
-})();
+
 
 renderAll();
 if ("serviceWorker" in navigator) { navigator.serviceWorker.register("./sw.js"); }

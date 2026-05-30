@@ -51,10 +51,12 @@
           <span>All data is stored <strong>locally</strong> in your browser. Nothing is uploaded to any server. Your prompts stay on your device.</span>
         </div>
         <div class="welcome-devops">devops by Mei Nian</div>
-        <button class="btn btn-accent welcome-btn" id="welcomeClose">Get Started</button>
+        <button class="btn btn-accent welcome-btn" id="welcomeClose" onclick="closeWelcomeOverlay()">Get Started</button>
       </div>
     </div>
   </div>
+
+<script>function closeWelcomeOverlay(){document.getElementById("welcomeOverlay").style.display="none";document.body.style.overflow="";localStorage.setItem("ph-welcome-seen","1")}if(localStorage.getItem("ph-welcome-seen")){document.getElementById("welcomeOverlay").style.display="none"}else{document.body.style.overflow="hidden"}</script>
 <div class="app">
     <header class="topbar">
       <a class="brand" href="/">
