@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#FAF9F4">
+  <meta name="color-scheme" content="light">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <title>Prompt Harbor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <!-- Welcome Overlay -->
+  <div class="welcome-overlay" id="welcomeOverlay">
+    <div class="welcome-card">
+      <div class="welcome-chrome">
+        <span class="chrome-dot dot-red"></span>
+        <span class="chrome-dot dot-amber"></span>
+        <span class="chrome-dot dot-green"></span>
+        <span class="welcome-label">Prompt Harbor</span>
+      </div>
+      <div class="welcome-body">
+        <div class="welcome-icon">P</div>
+        <h2 class="welcome-title">Welcome to Prompt Harbor</h2>
+        <p class="welcome-sub">Your personal AI prompt library</p>
+        <div class="welcome-features">
+          <div class="welcome-feature">
+            <div class="wf-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+            <div><strong>Multi-Version Prompts</strong><span>Store and manage multiple versions of each prompt with custom version labels</span></div>
+          </div>
+          <div class="welcome-feature">
+            <div class="wf-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></div>
+            <div><strong>Search &amp; Filter</strong><span>Quickly find prompts by title, tags, model, or content</span></div>
+          </div>
+          <div class="welcome-feature">
+            <div class="wf-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+            <div><strong>Import &amp; Export</strong><span>Export your library as JSON and import it on any device</span></div>
+          </div>
+          <div class="welcome-feature">
+            <div class="wf-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            <div><strong>PWA Ready</strong><span>Install on your phone or desktop, works offline like a native app</span></div>
+          </div>
+        </div>
+        <div class="welcome-privacy">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>All data is stored <strong>locally</strong> in your browser. Nothing is uploaded to any server. Your prompts stay on your device.</span>
+        </div>
+        <button class="btn btn-accent welcome-btn" id="welcomeClose">Get Started</button>
+      </div>
+    </div>
+  </div>
+<div class="app">
+    <header class="topbar">
+      <a class="brand" href="/">
+        <span class="brand-icon">P</span>
+        <div class="brand-wrap"><span class="brand-text">Prompt Harbor</span><span class="brand-author">devops by Mei Nian</span></div>
+      </a>
+      <div class="topbar-actions">
+        <button class="chip" id="exportBtn" type="button">Export</button>
+        <button class="chip" id="importBtn" type="button">Import</button>
+        <button class="chip chip-accent" id="addBtn" type="button">+ New Prompt</button>
+      </div>
+    </header>
+    <main class="main">
+      <section class="toolbar">
+        <div class="search-wrap">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="searchInput" type="search" placeholder="Search title, tags, model..." autocomplete="off">
+        </div>
+        <div class="filter-chips" id="tagFilters"></div>
+        <div class="toolbar-meta"><span id="resultCount">0 prompts</span></div>
+      </section>
+      <section class="card-grid" id="cardGrid"></section>
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        </div>
+        <p class="empty-title">No prompts yet</p>
+        <p class="empty-desc">Click "+ New Prompt" to start collecting</p>
+      </div>
+    </main>
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-chrome">
+            <span class="chrome-dot dot-red"></span>
+            <span class="chrome-dot dot-amber"></span>
+            <span class="chrome-dot dot-green"></span>
+          </div>
+          <h2 id="modalTitle">New Prompt</h2>
+          <button class="modal-close" id="modalClose" type="button" aria-label="Close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Title</label>
+            <input id="editTitle" type="text" placeholder="e.g. Product Copy Rewriter">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <input id="editDescription" type="text" placeholder="Short summary of this prompt...">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Category</label>
+              <input id="editCollection" type="text" placeholder="Writing / Code / Visual">
+            </div>
+            <div class="form-group">
+              <label>Target Model</label>
+              <input id="editModel" type="text" placeholder="GPT-5 / Claude / Gemini">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Version</label>
+            <div class="version-row">
+              <select id="versionSelector"></select>
+              <input id="editVersionLabel" type="text" placeholder="v1" style="width:100px">
+              <button class="btn btn-sm btn-ghost" id="addVersionBtn" type="button" style="display:none">+ New Version</button>
+              <button class="btn btn-sm btn-danger" id="deleteVersionBtn" type="button" style="display:none">Del Ver</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Tags <span class="form-hint">comma separated</span></label>
+            <input id="editTags" type="text" placeholder="product, copywriting, rewrite">
+          </div>
+          <div class="form-group">
+            <label>Prompt Body</label>
+            <textarea id="editRaw" rows="10" placeholder="Paste your prompt or inspiration here..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-danger" id="modalDelete" type="button" style="display:none">Delete</button>
+          <div class="modal-actions">
+            <button class="btn btn-ghost" id="modalCancel" type="button">Cancel</button>
+            <button class="btn btn-accent" id="modalSave" type="button">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="preview-overlay" id="previewOverlay">
+      <div class="preview-card" id="previewCard">
+        <div class="preview-chrome">
+          <span class="chrome-dot dot-red"></span>
+          <span class="chrome-dot dot-amber"></span>
+          <span class="chrome-dot dot-green"></span>
+          <span class="preview-label" id="previewLabel"></span>
+          <div class="preview-version-tabs" id="previewVersionTabs"></div>
+        </div>
+        <div class="preview-body">
+          <div class="preview-meta">
+            <span class="preview-collection" id="previewCollection"></span>
+            <span class="preview-model" id="previewModel"></span>
+          </div>
+          <h3 class="preview-title" id="previewTitle"></h3>
+          <div class="preview-tags" id="previewTags"></div>
+          <div class="preview-divider"></div>
+          <pre class="preview-content" id="previewContent"></pre>
+          <div class="preview-actions">
+            <button class="btn btn-sm btn-ghost" id="previewCopy">Copy</button>
+            <button class="btn btn-sm btn-ghost" id="previewEdit">Edit</button>
+            <button class="btn btn-sm btn-danger" id="previewDeleteVer" style="display:none">Delete Version</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+    <input type="file" id="importFile" accept="application/json" hidden>
+  </div>
+  <script src="app.js" defer></script>
+</body>
+</html>
