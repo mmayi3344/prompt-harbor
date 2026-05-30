@@ -162,7 +162,7 @@ body { font-family: var(--font); background: var(--paper); color: var(--ink); mi
 }
 
 /* ===== Welcome Overlay ===== */
-.welcome-overlay {
+.welcome-overlay { overflow: hidden;
   position: fixed; inset: 0; z-index: 300;
   display: flex; align-items: center; justify-content: center;
   background: rgba(15,30,25,0.35);
