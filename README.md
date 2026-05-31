@@ -31,3 +31,7 @@ After deploying via GitHub Pages:
 https://mmayi3344.github.io/prompt-harbor/
 ```
 
+
+---
+
+Cloudflare Pages: https://prompt-harbor.pages.dev
