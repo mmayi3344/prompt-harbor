@@ -139,11 +139,7 @@ function renderCards() {
   }).join("");
 
   cardGrid.querySelectorAll(".prompt-card").forEach(function(card) {
-    card.addEventListener("mousemove", function(e) {
-      var rect = card.getBoundingClientRect();
-      card.style.setProperty("--mouse-x", ((e.clientX - rect.left) / rect.width) * 100 + "%");
-      card.style.setProperty("--mouse-y", ((e.clientY - rect.top) / rect.height) * 100 + "%");
-    });
+    card.addEventListener("mousemove", handleCardMove);
     card.addEventListener("click", function(e) {
       if (e.target.closest(".card-action-btn")) return;
       showPreview(card.dataset.id);
@@ -167,6 +163,22 @@ function renderCards() {
 function renderAll() { renderTagFilters(); renderCards(); }
 
 function escHtml(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+// Throttled card interaction helpers to reduce repaint
+function updateCardGradient(card, e) {
+  var rect = card.getBoundingClientRect();
+  card.style.setProperty("--mouse-x", ((e.clientX - rect.left) / rect.width) * 100 + "%");
+  card.style.setProperty("--mouse-y", ((e.clientY - rect.top) / rect.height) * 100 + "%");
+}
+var gradientRAF = null;
+function handleCardMove(e) {
+  var card = e.currentTarget;
+  if (gradientRAF) return;
+  gradientRAF = requestAnimationFrame(function() {
+    gradientRAF = null;
+    updateCardGradient(card, e);
+  });
+}
 
 // ===== Preview =====
 let previewId = null;
@@ -439,6 +451,23 @@ function deletePrompt(id) {
   renderAll();
 }
 
+// ===== Font Select =====
+var fontSelect = $("#fontSelect");
+var FONT_STORAGE_KEY = "prompt…font-pref";
+
+function applyFontPref() {
+  var val = localStorage.getItem(FONT_STORAGE_KEY) || "system";
+  fontSelect.value = val;
+  document.documentElement.classList.toggle("fonts-system", val === "system");
+}
+
+fontSelect.addEventListener("change", function() {
+  localStorage.setItem(FONT_STORAGE_KEY, fontSelect.value);
+  applyFontPref();
+});
+
+applyFontPref();
+
 $("#addBtn").addEventListener("click", function() { openEditor(null); });
 $("#modalClose").addEventListener("click", closeEditor);
 $("#modalCancel").addEventListener("click", closeEditor);
@@ -446,7 +475,11 @@ $("#modalSave").addEventListener("click", savePrompt);
 $("#modalDelete").addEventListener("click", function() { if (editingId) { closeEditor(); deletePrompt(editingId); } });
 modalOverlay.addEventListener("click", function(e) { if (e.target === modalOverlay) closeEditor(); });
 document.addEventListener("keydown", function(e) { if (e.key === "Escape" && modalOverlay.classList.contains("active")) closeEditor(); });
-searchInput.addEventListener("input", function() { renderCards(); });
+var searchTimer;
+searchInput.addEventListener("input", function() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(function() { renderCards(); }, 80);
+});
 
 $("#exportBtn").addEventListener("click", function() {
   if (prompts.length === 0) { showToast("Nothing to export"); return; }
