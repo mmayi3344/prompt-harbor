@@ -1,4 +1,4 @@
-﻿# Prompt Harbor
+# Prompt Harbor
 
 A clean, personal AI prompt library PWA. Collect, version, and manage your prompts — all stored locally in your browser.
 
@@ -31,6 +31,3 @@ After deploying via GitHub Pages:
 https://mmayi3344.github.io/prompt-harbor/
 ```
 
----
-
-devops by Mei Nian
